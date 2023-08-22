@@ -37,6 +37,24 @@ export class TrackService {
     const parsed = await res.json();
     return parsed;
   }
+  async updateTrackById(id: number, body: Track): Promise<void> {
+    const isTrack = await this.getTrackById(id);
+    if (!Object.keys(isTrack).length) return;
+    const updatedTrack = {
+      title: body.title,
+      duration: body.duration,
+      artist: body.artist,
+    };
+    const res = await fetch(BASE_URL + id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedTrack),
+    });
+    const parsed = res.json();
+    return parsed;
+  }
 
   private async setId(): Promise<number> {
     const tracks = await this.getTracks();
