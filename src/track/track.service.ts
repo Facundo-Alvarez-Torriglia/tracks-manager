@@ -52,8 +52,6 @@ export class TrackService {
       },
       body: JSON.stringify(updatedTrack),
     });
-    const parsed = res.json();
-    return parsed;
   }
 
   private async setId(): Promise<number> {

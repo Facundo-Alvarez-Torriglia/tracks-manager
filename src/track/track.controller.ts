@@ -3,9 +3,12 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { Track } from './track.interface';
 import { TrackService } from './track.service';
@@ -17,8 +20,15 @@ export class TrackController {
     return this.trackService.getTracks();
   }
   @Get('/:id')
-  getTrackById(@Param('id') id: number): Promise<Track> {
-    return this.trackService.getTrackById(id);
+  async getTrackById(@Res() response, @Param('id') id: number): Promise<any> {
+    const responseFromService = await this.trackService.getTrackById(id);
+    if (Object.keys(responseFromService).length) {
+      return response.status(HttpStatus.OK).json(responseFromService);
+    } else {
+      return response
+        .status(HttpStatus.NOT_FOUND)
+        .json({ message: 'pista no encontrada' });
+    }
   }
   @Post()
   createTrack(@Body() body): Promise<any> {
@@ -29,6 +39,7 @@ export class TrackController {
     return this.trackService.deleteTrackById(id);
   }
   @Put('/:id')
+  @HttpCode(204)
   updateTrackById(@Param('id') id: number, @Body() body): Promise<void> {
     return this.trackService.updateTrackById(id, body);
   }
