@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 const BASE_URL = 'http://localhost:3030/tracks/';
 import { Track } from './track.interface';
 @Injectable()
@@ -12,7 +12,9 @@ export class TrackService {
   async getTrackById(id: number): Promise<Track> {
     const res = await fetch(BASE_URL + id);
     const parsed = await res.json();
-    return parsed;
+    //track existe: lo retornamos al controller
+    if (Object.keys(parsed).length) return parsed;
+    throw new NotFoundException(`Track  con id ${id} no existe`);
   }
 
   async createTrack(track: Track): Promise<Track> {
@@ -45,7 +47,7 @@ export class TrackService {
       duration: body.duration,
       artist: body.artist,
     };
-    const res = await fetch(BASE_URL + id, {
+    await fetch(BASE_URL + id, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

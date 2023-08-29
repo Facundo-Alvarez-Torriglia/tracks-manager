@@ -7,8 +7,7 @@ import {
   Param,
   Post,
   Put,
-  Res,
-  HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { Track } from './track.interface';
 import { TrackService } from './track.service';
@@ -16,19 +15,13 @@ import { TrackService } from './track.service';
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
   @Get()
-  getTracks(): Promise<Track[]> {
+  getTracks(@Query() artist: string): Promise<Track[]> {
+    console.log(artist);
     return this.trackService.getTracks();
   }
   @Get('/:id')
-  async getTrackById(@Res() response, @Param('id') id: number): Promise<any> {
-    const responseFromService = await this.trackService.getTrackById(id);
-    if (Object.keys(responseFromService).length) {
-      return response.status(HttpStatus.OK).json(responseFromService);
-    } else {
-      return response
-        .status(HttpStatus.NOT_FOUND)
-        .json({ message: 'pista no encontrada' });
-    }
+  async getTrackById(@Param('id') id: number): Promise<any> {
+    return this.trackService.getTrackById(id);
   }
   @Post()
   createTrack(@Body() body): Promise<any> {
