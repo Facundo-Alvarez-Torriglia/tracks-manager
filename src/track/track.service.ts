@@ -1,14 +1,26 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 const BASE_URL = 'http://localhost:3030/tracks/';
 import { Track } from './track.interface';
 @Injectable()
 export class TrackService {
   async getTracks(): Promise<Track[]> {
     const res = await fetch(BASE_URL);
+    if (!res.ok) throw new BadRequestException();
     const parsed = res.json();
     return parsed;
   }
-
+  async getTracksByArtist(artist: string): Promise<Track[]> {
+    const allTracks = await this.getTracks();
+    const filteredByArtist = allTracks.filter((tr: Track) =>
+      tr.artist.toLocaleLowerCase().includes(artist.toLocaleLowerCase()),
+    );
+    if (!filteredByArtist.length) throw new NotFoundException();
+    return filteredByArtist;
+  }
   async getTrackById(id: number): Promise<Track> {
     const res = await fetch(BASE_URL + id);
     const parsed = await res.json();

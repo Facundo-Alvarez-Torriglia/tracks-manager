@@ -15,9 +15,9 @@ import { TrackService } from './track.service';
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
   @Get()
-  getTracks(@Query() artist: string): Promise<Track[]> {
-    console.log(artist);
-    return this.trackService.getTracks();
+  getTracks(@Query('artist') artist?: string): Promise<Track[]> {
+    if (!artist) return this.trackService.getTracks();
+    return this.trackService.getTracksByArtist(artist);
   }
   @Get('/:id')
   async getTrackById(@Param('id') id: number): Promise<any> {
