@@ -1,9 +1,11 @@
 import {
+  Res,
   Body,
   Controller,
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -20,8 +22,15 @@ export class TrackController {
     return this.trackService.getTracksByArtist(artist);
   }
   @Get('/:id')
-  async getTrackById(@Param('id') id: number): Promise<any> {
-    return this.trackService.getTrackById(id);
+  async getTrackById(@Res() res, @Param('id') id: number): Promise<any> {
+    if (!isNaN(Number(id))) {
+      const responseFromService = await this.trackService.getTrackById(id);
+      return res.json(responseFromService);
+    } else {
+      return res
+        .status(HttpStatus.NOT_ACCEPTABLE)
+        .json({ message: 'No voy a ir al servicio con un ID inválido' });
+    }
   }
   @Post()
   createTrack(@Body() body): Promise<any> {
