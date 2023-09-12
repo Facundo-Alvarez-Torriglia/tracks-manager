@@ -1,11 +1,8 @@
 import {
-  Res,
   Body,
   Controller,
   Delete,
   Get,
-  HttpCode,
-  HttpStatus,
   Param,
   Post,
   Put,
@@ -41,7 +38,6 @@ export class TrackController {
     return this.trackService.deleteTrackById(id);
   }
   @Put('/:id')
-  @HttpCode(204)
   updateTrackById(@Param('id') id: number, @Body() body): Promise<void> {
     return this.trackService.updateTrackById(id, body);
   }
