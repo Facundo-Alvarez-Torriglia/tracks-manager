@@ -1,17 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Agrega la librería de autenticación de Google -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="TU_CLIENT_ID.apps.googleusercontent.com">
+    <!--style-->
     <link rel="stylesheet" href="/client/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-    <title>Home</title>
+    <title>Login</title>
 </head>
 <body>
     <nav>
         <ul>
-            <li><a href="login.html">Login</a></li>
+            <li><a href="index.html">Home</a></li>
             <li><a href="canciones.html">Canciones</a></li>
             <li class="logo"><img src="/client/img/logo.png" alt="Logo"></a></li>
             <li><a href="https://api.whatsapp.com/send?phone=TUNUMERO" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
@@ -19,10 +22,13 @@
             <li><a href="https://www.instagram.com/TUCUENTAINSTAGRAM" target="_blank"><i class="fab fa-instagram"></i></a></li>
         </ul>
     </nav>
-    <img id="imagenCentral" src="/client/img/turntable-2157292.jpg" alt="imagen principal">
-
-    <div id="info"></div>
-    <button id="botonConsultar">Consulta</button>
-    <script src="app.js"></script>
+    <h1>Página de Inicio de Sesión</h1>
+    <form>
+        <h1>Login con Google</h1>
+    
+        <!-- Botón de inicio de sesión de Google -->
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        
+    </form>
 </body>
 </html>
