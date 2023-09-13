@@ -5,6 +5,8 @@ import {
 } from '@nestjs/common';
 const BASE_URL = 'http://localhost:3030/tracks/';
 import { Track } from './track.interface';
+import { TrackDto } from './track.dto';
+import fetch from 'node-fetch';
 @Injectable()
 export class TrackService {
 
@@ -59,12 +61,11 @@ async getTracksByDuration(duration: number): Promise<Track[]> {
     throw new NotFoundException(`Track  con id ${id} no existe`);
   }
 
-  //Metodos POST
-  async createTrack(track: Track): Promise<Track> {
+  //Metodos POST track del tipo DTO (track.dto)
+  async createTrack(track: TrackDto): Promise<Track> {
     const id = await this.setId();
     const { title, duration, artist } = track;
     const newTrack = { id, title, duration, artist };
-    
     const res = await fetch(BASE_URL, {
       method: 'POST',
       headers: {

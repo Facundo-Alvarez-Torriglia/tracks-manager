@@ -7,11 +7,12 @@ import {
   Post,
   Put,
   Query,
-  Res,
+  ParseIntPipe,
   HttpStatus
 } from '@nestjs/common';
 import { Track } from './track.interface';
 import { TrackService } from './track.service';
+import { TrackDto } from './track.dto';
 @Controller('tracks')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
@@ -38,23 +39,18 @@ export class TrackController {
     }
   }
   
-  //Metodo GET BY ID
+  //Metodo GET BY ID con validation Pipe
   @Get('/:id')
-  async getTrackById(@Res() res, @Param('id') id: number): Promise<any> {
-    if (!isNaN (Number(id))) { //si es ???? 
-      const responseFromService = await this.trackService.getTrackById(id); 
-      return res.json(responseFromService);
-    } else {
-      return res 
-      .status(HttpStatus.NOT_ACCEPTABLE)
-      .JSON({message: 'No voy a ir al servicio con ID invalido'});
+  async getTrackById(@Param('id', new ParseIntPipe({
+     errorHttpStatusCode:HttpStatus.NOT_ACCEPTABLE,
+  })) id: number): Promise<any> {
+       return this.trackService.getTrackById(id);
     }
-  }
 
-  //Metodo POST
+  //Metodo POST con DTO
   @Post()
-  createTrack(@Body() body): Promise<any> {
-    return this.trackService.createTrack(body);
+  createTrack(@Body() trackDto: TrackDto): Promise<any> {
+    return this.trackService.createTrack(trackDto);
   }
 
   //Metodo DELETE
@@ -68,4 +64,6 @@ export class TrackController {
   updateTrackById(@Param('id') id: number, @Body() body): Promise<void> {
     return this.trackService.updateTrackById(id, body);
   }
+
+   //Metodo pach?????
 }
